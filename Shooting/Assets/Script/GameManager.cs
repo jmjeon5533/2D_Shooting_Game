@@ -194,8 +194,6 @@ public class GameManager : MonoBehaviour
                 }
                 save.PlayerData.Add(play);
                 PlayerPrefs.SetString("SaveData", JsonUtility.ToJson(save));
-                print(PlayerPrefs.GetString("SaveData"));
-                print(save.PlayerData.Count);
                 StartCoroutine(Saved());
                 IEnumerator Saved()
                 {
