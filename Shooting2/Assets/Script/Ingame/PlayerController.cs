@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    Rigidbody rigid;
+    [SerializeField] Cam cam;
     [Header("½ºÅÝ °ü·Ã")]
     public float hp;
     public float maxHp;
@@ -27,9 +29,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform[] FirePos = new Transform[5];
     [Tooltip("¹«±â ·¹º§")]
     public int FireLevel = 1;
+    [Tooltip("Á×À½ ÀÌÆåÆ®")]
+    [SerializeField] GameObject DeathEffect;
+    [SerializeField] GameObject CrashEffect;
 
     void Start()
     {
+        rigid = GetComponent<Rigidbody>();
+        rigid.useGravity = false;
         borderSize = new Vector3(160, 0, 100);
         FireCurtime = FireCooltime;
         maxHp = hp;
@@ -72,6 +79,42 @@ public class PlayerController : MonoBehaviour
         {
             FireCurtime = 0;
             StartCoroutine(FireBullet());
+        }
+    }
+    public void Damage(int damage)
+    {
+        hp -= damage;
+        print(hp);
+        if (hp <= 0) Death();
+
+    }
+    public void Death()
+    {
+        StartCoroutine(Dead());
+    }
+    IEnumerator Dead()
+    {
+        rigid.useGravity = true;
+        cam.Isdeath = true;
+        for(int i = 0; i < 10; i++)
+        {
+            Instantiate(DeathEffect,transform.position + Random.insideUnitSphere * 10f, Quaternion.identity);
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+    IEnumerator CrashLanding()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            Instantiate(CrashEffect, transform.position + new Vector3(0, 5, 0) + Random.insideUnitSphere * 10f, Quaternion.identity);
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Ground"))
+        {
+            StartCoroutine(CrashLanding());
         }
     }
     IEnumerator FireBullet()

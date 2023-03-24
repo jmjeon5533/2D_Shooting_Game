@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Bullet : BulletBase
+public class EnemyBullet : BulletBase
 {
     protected override void Start()
     {
@@ -14,15 +15,15 @@ public class Bullet : BulletBase
     }
     protected override void BulletMove()
     {
-        transform.Translate(Vector3.forward * MoveSpeed * Time.deltaTime);
+        transform.Translate(Vector3.back * MoveSpeed * Time.deltaTime);
     }
     protected override void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Player"))
         {
             Destroy(gameObject);
-            var Enemy = other.GetComponent<EnemyBase>();
-            Enemy.Damage(Damage);
+            var player = other.GetComponent<PlayerController>();
+            player.Damage(Damage);
             Instantiate(DeathEffect, transform.position, Quaternion.identity);
         }
     }

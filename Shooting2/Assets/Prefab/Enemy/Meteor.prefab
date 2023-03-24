@@ -4829,9 +4829,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 50
-  MoveSpeed: 0
-  Damage: 30
+  MoveSpeed: 50
+  damage: 30
   DeathEffect: {fileID: 3622490740556839776, guid: 23ba52143f9daa5449cc5270cb49d100, type: 3}
+  SummonEffect: {fileID: 0}
   RotateSpeed: 70
 --- !u!54 &7026809499626099188
 Rigidbody:

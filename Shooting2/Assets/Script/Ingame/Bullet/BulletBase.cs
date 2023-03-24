@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletBase : MonoBehaviour
+public abstract class BulletBase : MonoBehaviour
 {
     [Header("ÃÑ¾Ë ±âº»")]
-    [SerializeField] float MoveSpeed;
-    [SerializeField] float DeathTime;
-    public float Damage;
+    public float MoveSpeed;
+    public float DeathTime;
+    public int Damage;
     public GameObject DeathEffect;
     protected virtual void Start()
     {
@@ -19,18 +19,6 @@ public class BulletBase : MonoBehaviour
     {
         BulletMove();
     }
-    protected virtual void BulletMove()
-    {
-        transform.Translate(Vector3.forward * MoveSpeed * Time.deltaTime);
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            Destroy(gameObject);
-            other.GetComponent<EnemyBase>().hp -= Damage;
-            Instantiate(DeathEffect, transform.position, Quaternion.identity);
-            if (other.GetComponent<EnemyBase>().hp <= 0) other.GetComponent<EnemyBase>().Dead();
-        }
-    }
+    protected abstract void BulletMove();
+    protected abstract void OnTriggerEnter(Collider other);
 }

@@ -6,8 +6,9 @@ public abstract class EnemyBase : MonoBehaviour
 {
     public float hp;
     public float MoveSpeed;
-    public int Damage;
+    public int damage;
     public GameObject DeathEffect;
+    public GameObject SummonEffect;
     protected virtual void Start()
     {
 
@@ -17,12 +18,17 @@ public abstract class EnemyBase : MonoBehaviour
         Move();
     }
     protected abstract void Move();
+    public virtual void Damage(int damage)
+    {
+        hp -= damage;
+        if (hp <= 0) Dead();
+    }
     public abstract void Dead();
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<PlayerController>().hp -= Damage;
+            other.GetComponent<PlayerController>().Damage(damage);
             Dead();
         }
     }
