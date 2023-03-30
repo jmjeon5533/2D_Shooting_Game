@@ -6,7 +6,10 @@ public abstract class BulletBase : MonoBehaviour
 {
     [SerializeField] float Range;
     public float MoveSpeed;
+    public float Damage;
     public Vector2 dir;
+    [Tooltip("Æø¹ß ÀÌÆåÆ®")]
+    public GameObject ExplosionEffect;
     [SerializeField] string[] HitTag;
     Collider2D[] hit;
 

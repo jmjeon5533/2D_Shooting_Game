@@ -14,6 +14,7 @@ public class Boss1 : BossBase
     }
     protected override void Update()
     {
+        base.Update();
         Rotation();
     }
     void Rotation()
@@ -78,7 +79,6 @@ public class Boss1 : BossBase
             float j = Random.Range(5, 10);
             for (int i = 0; i < j; i++)
             {
-                print(i * 5);
                 var g = Instantiate(Bullet[0], transform.position, Quaternion.identity);
                 g.GetComponent<BulletBase>().dir = new Vector2(i / j, -1);
                 yield return new WaitForSeconds(0.1f);
@@ -86,7 +86,6 @@ public class Boss1 : BossBase
             yield return new WaitForSeconds(1f);
             for (int i = 0; i < 6; i++)
             {
-                print(-i * 5);
                 var g = Instantiate(Bullet[0], transform.position, Quaternion.identity);
                 g.GetComponent<BulletBase>().dir = new Vector2(-i / j, -1);
                 yield return new WaitForSeconds(0.1f);

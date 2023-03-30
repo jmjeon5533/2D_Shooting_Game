@@ -4,18 +4,15 @@ using UnityEngine;
 
 public abstract class BossBase : EnemyBase
 {
-    
+
     protected virtual void Start()
     {
-        for(float t = 0; t < 1; t += 0.1f)
-        {
-            Debug.Log($"{t}/{Easing.OutQuad(t)}");
-        }
+        GameManager.instance.boss = this;
         StartCoroutine(Appear());
     }
     IEnumerator Appear()
     {
-        for(float t = 0; t <= 4; t += Time.deltaTime)
+        for (float t = 0; t <= 4; t += Time.deltaTime)
         {
             var startpos = new Vector3(0, 12, 0);
             var endpos = new Vector3(0, 4, 0);
@@ -27,18 +24,36 @@ public abstract class BossBase : EnemyBase
     }
 
     protected abstract IEnumerator Routine();
+    public override void Damage(float Damage)
+    {
+        base.Damage(Damage);
+        if(HP <= 0 && !GameManager.instance.IsClear)
+        {
+            Dead();
+        }
+    }
     public void Dead()
     {
         StartCoroutine(DisAppear());
     }
     IEnumerator DisAppear()
     {
-        yield return null;
+        GameManager.instance.IsClear = true;
+        while(transform.position.y <= 8)
+        {
+            Instantiate(ExplodeEffect, transform.position + new Vector3(Random.Range(-2f, 2f), Random.Range(-2f, 2f)), Quaternion.identity);
+            yield return new WaitForSeconds(0.1f);
+        }
+        GameManager.instance.IsClear = false;
+        GameManager.instance.IsClearMove = true;
     }
-
-    // Update is called once per frame
+    
     protected virtual void Update()
     {
-        
+        if (GameManager.instance.IsClear)
+        {
+            transform.Translate(new Vector3(0,0.8f) * Time.deltaTime);
+        }
     }
+
 }
