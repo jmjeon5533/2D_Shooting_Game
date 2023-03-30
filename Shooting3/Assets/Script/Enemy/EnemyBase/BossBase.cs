@@ -15,7 +15,7 @@ public abstract class BossBase : EnemyBase
         for (float t = 0; t <= 4; t += Time.deltaTime)
         {
             var startpos = new Vector3(0, 12, 0);
-            var endpos = new Vector3(0, 4, 0);
+            var endpos = new Vector3(0, 3, 0);
 
             transform.position = Vector3.Lerp(startpos, endpos, Easing.OutQuad(t / 4));
             yield return null;
@@ -26,13 +26,13 @@ public abstract class BossBase : EnemyBase
     protected abstract IEnumerator Routine();
     public override void Damage(float Damage)
     {
-        base.Damage(Damage);
+        HP -= Damage;
         if(HP <= 0 && !GameManager.instance.IsClear)
         {
             Dead();
         }
     }
-    public void Dead()
+    public override void Dead()
     {
         StartCoroutine(DisAppear());
     }

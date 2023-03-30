@@ -4,14 +4,20 @@ using UnityEngine;
 
 public abstract class EnemyBase : MonoBehaviour
 {
-    public float HP,MaxHP;
+    public float HP, MaxHP;
+    public float MoveSpeed;
     public GameObject ExplodeEffect;
-    void Update()
+    private void Start()
     {
-        
+        MaxHP = HP;
     }
     public virtual void Damage(float Damage)
     {
         HP -= Damage;
+        if (HP <= 0)
+        {
+            Dead();
+        }
     }
+    public abstract void Dead();
 }
