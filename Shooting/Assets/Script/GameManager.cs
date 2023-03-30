@@ -26,7 +26,9 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
     }
+    [Header("스탯")]
     public int HP, MaxHP;
+    public int Gas, MaxGas;
     public float XP = 0;
     public float[] XPGauge = new float[5];
     public int Level = 0;
@@ -46,8 +48,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject InputField;
     [SerializeField] Text InputFieldText;
     [SerializeField] Text IsSaveText;
-
-    [SerializeField] Image XPSlider, HPSlider;
+    [Header("슬라이더")]
+    [SerializeField] Image XPSlider;
+    [SerializeField] Image HPSlider, GasSlider;
     [SerializeField] Text XPText;
     [SerializeField] Text ScoreText;
     public Text StageText; 
@@ -61,6 +64,7 @@ public class GameManager : MonoBehaviour
         GameEndPanel.SetActive(false);
         if(StageNum.StageNumber == 0) StageNum.Score = 0;
         MaxHP = HP;
+        MaxGas = Gas;
     }
     void SaveLoad()
     {
@@ -106,6 +110,7 @@ public class GameManager : MonoBehaviour
     {
         XPUI();
         HPUI();
+        GasUI();
         ScoreUI();
         if (IsNextStage) isClear();
         if (KillEnemy) KillEnemy = false;
@@ -116,7 +121,15 @@ public class GameManager : MonoBehaviour
         HPSlider.fillAmount = Hp / MaxHp;
         if (HP <= 0 && !IsUI)
         {
-            player.gameObject.SetActive(false);
+            GameOver();
+        }
+    }
+    void GasUI()
+    {
+        float gas = Gas, Maxgas = MaxGas;
+        GasSlider.fillAmount = gas / MaxGas;
+        if(Gas <= 0 && !IsUI)
+        {
             GameOver();
         }
     }
@@ -126,7 +139,9 @@ public class GameManager : MonoBehaviour
     }
     void GameOver()
     {
-        var u = UIManager.instance;
+
+        player.gameObject.SetActive(false);
+
         IsUI = true;
         GameEndPanel.SetActive(true);
         InputField.SetActive(false);
